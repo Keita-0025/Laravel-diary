@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name='header'>
-        <h2 class="font-semibold text-gray-800 leading-tight">
-            フォーム
+        <h2 class="font-semibold text-xl text-gray-800">
+            一覧表示
         </h2>
     </x-slot>
 
@@ -9,7 +9,7 @@
         <x-message :message="session('message')" />
 
         @foreach ($posts as $post)
-            <div class="mt-4 p-8 bg-white w-full rounded-2xl">
+            <div class="max-w-7xl mt-4 mx-auto p-8  bg-white  rounded-2xl">
                 <h1 class="p-4 text-lg font-semibold">
                     件名：
                     <a href="{{ route('post.show', $post) }}" class="text-blue-600">

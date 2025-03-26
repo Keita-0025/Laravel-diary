@@ -12,9 +12,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
+
+Route::get('/dashboard',[PostController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,6 +30,7 @@ require __DIR__ . '/auth.php';
 Route::get('language/{locale}', function ($locale) {
     app()->setLocale($locale);
     session()->put('locale', $locale);
+
 
     return redirect()->back();
 });
