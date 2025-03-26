@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\post;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class PostController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // $posts=Post::all();
-        $posts=Post::paginate(10);
+        $posts = Post::paginate(10);
         return view('post.index', compact('posts'));
     }
 
@@ -22,6 +24,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Post::class);
         return view('post.create');
     }
 
@@ -30,16 +33,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Post::class);
         $validated = $request->validate([
-            'title'=>'required|max:20',
-            'body'=>'required|max:400',
+            'title' => 'required|max:20',
+            'body' => 'required|max:400',
         ]);
 
         $validated['user_id'] = auth()->id();
 
         $post = Post::create($validated);
 
-        $request->session()->flash('message','保存しました');
+        $request->session()->flash('message', '保存しました');
         return redirect()->route('post.index');
     }
 
@@ -56,6 +60,7 @@ class PostController extends Controller
      */
     public function edit(post $post)
     {
+        $this->authorize('update', $post);
         return view('post.edit', compact('post'));
     }
 
@@ -64,27 +69,30 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $this->authorize('update', $post);
+
         $validated = $request->validate([
-            'title'=>'required|max:20',
-            'body'=>'required|max:400',
+            'title' => 'required|max:20',
+            'body' => 'required|max:400',
         ]);
 
         $validated['user_id'] = auth()->id();
 
         $post->update($validated);
 
-        $request->session()->flash('message','更新しました');
+        $request->session()->flash('message', '更新しました');
         return redirect()->route('post.index');
-
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( Request $request, Post $post)
+    public function destroy(Request $request, Post $post)
     {
+        $this->authorize('update', $post);
+
         $post->delete();
-        $request->session()->flash('message','削除しました');
+        $request->session()->flash('message', '削除しました');
         return redirect()->route('post.index');
     }
 }

@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="mx-auto px-6">
+    <div class=" max-w-7xl mx-auto px-6">
         <x-message :message="session('message')" />
 
         @foreach ($posts as $post)
