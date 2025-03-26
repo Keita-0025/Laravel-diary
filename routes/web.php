@@ -11,6 +11,10 @@ Route::resource('post',PostController::class);
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/mypage', [PostController::class, 'mypage'])
+    ->name('post.mypage')
+    ->middleware('auth');
+
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

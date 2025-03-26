@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name='header'>
         <h2 class="font-semibold text-xl text-gray-800">
-            一覧表示
+            自分の投稿一覧
         </h2>
     </x-slot>
 
@@ -20,14 +20,10 @@
                 <p class="mt-4 p-4">
                     {{ $post->body }}
                 </p>
-                <div class="p-4 text-sm font-semibold flex items-center justify-between">
+                <div class="p-4 text-sm font-semibold">
                     <p>
                         {{ $post->created_at }} / {{ $post->user->name ?? 'anonymity' }}
                     </p>
-                    <a href="{{ route('post.create', $post) }}"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        コメントする
-                    </a>
                 </div>
             </div>
         @endforeach

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
@@ -94,5 +95,12 @@ class PostController extends Controller
         $post->delete();
         $request->session()->flash('message', '削除しました');
         return redirect()->route('post.index');
+    }
+
+    public function mypage()
+    {
+        $user = Auth::user();
+        $posts = Post::where('user_id', $user->id)->latest()->paginate(10);
+        return view('post.mypage', compact('posts'));
     }
 }
