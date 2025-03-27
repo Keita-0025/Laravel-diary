@@ -4,23 +4,28 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use App\Models\Post;
 
-Route::resource('post',PostController::class);
+Route::resource('post', PostController::class);
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/mypage', [PostController::class, 'mypage'])
     ->name('post.mypage')
     ->middleware('auth');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/post/{post}/comment/create', [CommentController::class, 'create'])->name('comment.create');
+    Route::post('/post/{post}/comment', [CommentController::class, 'store'])->name('comment.store');
+});
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->name('dashboard');
 
-Route::get('/dashboard',[PostController::class, 'index'])->middleware(['auth'])->name('dashboard');
+
+
+Route::get('/dashboard', [PostController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

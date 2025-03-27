@@ -9,7 +9,7 @@
         <x-message :message="session('message')" />
 
         @foreach ($posts as $post)
-            <div class="max-w-7xl mt-4 mx-auto p-8  bg-white  rounded-2xl">
+            <div class="max-w-7xl mt-4 mx-auto p-5  bg-white  rounded-2xl">
                 <h1 class="p-4 text-lg font-semibold">
                     件名：
                     <a href="{{ route('post.show', $post) }}" class="text-blue-600">
@@ -21,10 +21,15 @@
                     {{ $post->body }}
                 </p>
                 <div class="p-4 text-sm font-semibold flex items-center justify-between">
-                    <p>
-                        {{ $post->created_at }} / {{ $post->user->name ?? 'anonymity' }}
-                    </p>
-                    <a href="{{ route('post.create', $post) }}"
+                    <div class="flex items-center">
+                        <p>
+                            {{ $post->created_at }} / {{ $post->user->name ?? 'anonymity' }}
+                        </p>
+                        <a href="{{ route('post.show', $post) }}" class="ml-4 text-gray-600">
+                            💬 {{ $post->comments->count() }} 件
+                        </あ>
+                    </div>
+                    <a href="{{ route('comment.create', $post) }}"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         コメントする
                     </a>

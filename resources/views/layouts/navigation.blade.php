@@ -13,10 +13,10 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
-                        投稿一覧
+                        タイムライン
                     </x-nav-link>
                     <x-nav-link :href="route('post.create')" :active="request()->routeIs('post.create')">
-                        新規作成
+                        新規投稿
                     </x-nav-link>
                     <x-nav-link :href="route('post.mypage')" :active="request()->routeIs('post.mypage')">
                         自分の投稿
@@ -70,7 +70,6 @@
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
-
                         @endif
                     </x-slot>
                 </x-dropdown>
