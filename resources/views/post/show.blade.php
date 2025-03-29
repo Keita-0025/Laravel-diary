@@ -4,55 +4,46 @@
             記事編集・コメント
         </h2>
     </x-slot>
-    <div class="max-w-7xl mt-4 mx-auto px-6 ">
+    <x-container>
         <x-message :message="session('message')" class=" max-w-7xl mx-auto px-6" />
-        <div class="mt-4 p-4 bg-white  rounded-2xl">
-            <h1 class="p-4 text-lg font-semibold">
-                件名：{{ $post->title }}
-            </h1>
+        <div class="max-w-7xl mt-4 mx-auto p-5  bg-white  rounded-2xl">
+            <x-post-header :title="$post->title" />
             <hr class="w-full">
-            <p class="mt-4 px-4 whitespace-pre-line">
-                {{ $post->body }}
-            </p>
-            <div class="text-sm font-semibold flex flex-row-reverse">
-                <p>{{ $post->created_at }}</p>
-            </div>
-            <div class="text-right flex mb-4">
-                @can('update', $post)
-                    <a href="{{ route('post.edit', $post) }}" class="flex-1">
-                        <x-button class="bg-green-500 hover:bg-green-700 ml-2">
-                            編集
-                        </x-button>
-                    </a>
-                @endcan
-                @can('delete', $post)
-                    <form method="post" action="{{ route('post.destroy', $post) }}" class="flex-2">
-                        @csrf
-                        @method('delete')
-                        <x-button class="bg-red-500 hover:bg-red-700 ml-2">
-                            削除
-                        </x-button>
-                    </form>
-                @endcan
-            </div>
+            <x-post-body :body="$post->body" />
+            <x-post-footer :post="$post" :createdAt="$post->created_at" :userName="$post->user->name" :commentCount="$post->comments->count()">
+                <div class="text-right flex mb-4">
+                    @can('update', $post)
+                        <a href="{{ route('post.edit', $post) }}" class="flex-1">
+                            <x-button class="bg-green-500 hover:bg-green-700 ml-2">
+                                編集
+                            </x-button>
+                        </a>
+                    @endcan
+                    @can('delete', $post)
+                        <form method="post" action="{{ route('post.destroy', $post) }}" class="flex-2">
+                            @csrf
+                            @method('delete')
+                            <x-button class="bg-red-500 hover:bg-red-700 ml-2">
+                                削除
+                            </x-button>
+                        </form>
+                    @endcan
+                </div>
+            </x-post-footer>
         </div>
-        <div class="mt-6 p-4 rounded-lg">
+
+        <div class="max-w-7xl mt-6 mx-auto  rounded-lg">
             <form method="post" action="{{ route('comment.store', $post) }}">
                 @csrf
                 <hr class="w-full">
-                <div>
-                    <div class="w-full flex flex-col">
-                        <label for="content" class="font-semibold mt-4">コメント</label>
-                        <x-input-error :messages="$errors->get('content')" class="mt-2" />
-                        <textarea name="content" class="w-full py-2 border border-gray-300 rounded-md" id="content" cols="30"
-                            rows="5">{{ old('content') }}</textarea>
-                    </div>
-                </div>
+                <x-input-field name="content" label="コメント" type="textarea" />
                 <x-button class="my-4">
                     ポストする
                 </x-button>
                 <hr class="w-full">
             </form>
+        </div>
+        <div class="max-w-7xl mt-6 mx-auto  rounded-lg">
             <h3 class="text-lg font-semibold my-4">コメント一覧</h3>
 
             @forelse ($comments as $comment)
@@ -94,6 +85,5 @@
                 <script src="{{ asset('js/commentDropdown.js') }}"></script>
             @endpush
         </div>
-    </div>
-
+    </x-container>
 </x-app-layout>

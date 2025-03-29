@@ -4,30 +4,26 @@
             コメント入力
         </h2>
     </x-slot>
-    <div class="max-w-7xl mx-auto px-6">
+    <x-container>
         @if (session('message'))
             <div class="text-green-600 font-bold">
                 {{ session('message') }}
             </div>
         @endif
-        <div class="bg-white shadow-md rounded-lg p-6 mt-4">
-            <h3 class="text-lg font-semibold">件名: {{ $post->title }}</h3>
-            <p class="mt-2 text-gray-700">{{ $post->body }}</p>
+        <div class="max-w-7xl mt-4 mx-auto p-5  bg-white  rounded-2xl">
+            <x-post-header :title="$post->title" :url="route('post.show', $post)" />
+            <hr class="w-full">
+            <x-post-body :body="$post->body" />
+            <x-post-footer :post="$post" :createdAt="$post->created_at" :userName="$post->user->name" :commentCount="$post->comments->count()">
+            </x-post-footer>
         </div>
-
+        <hr class="w-full">
         <form method="post" action="{{ route('comment.store', $post) }}">
             @csrf
-            <div>
-                <div class="w-full flex flex-col">
-                    <label for="content" class="font-semibold mt-4">コメント</label>
-                    <x-input-error :messages="$errors->get('content')" class="mt-2" />
-                    <textarea name="content" class="w-full py-2 border border-gray-300 rounded-md" id="content" cols="30"
-                        rows="5">{{ old('content') }}</textarea>
-                </div>
-            </div>
-            <x-primary-button class="mt-4">
+            <x-input-field name="content" label="コメント" type="textarea" />
+            <x-button class="mt-4">
                 送信する
-            </x-primary-button>
+            </x-button>
         </form>
-    </div>
+    </x-container>
 </x-app-layout>

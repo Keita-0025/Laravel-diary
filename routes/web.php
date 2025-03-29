@@ -8,16 +8,14 @@ use App\Http\Controllers\CommentController;
 use App\Models\Post;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PostController::class, 'index'])->name('post.index');
 
 Route::get('/mypage', [PostController::class, 'mypage'])
 ->name('post.mypage')
 ->middleware('auth');
 
 
-Route::get('post', [PostController::class, 'index'])->name('post.index');
+// Route::get('post', [PostController::class, 'index'])->name('post.index');
 
 Route::get('/dashboard', [PostController::class, 'index'])->middleware(['auth'])->name('dashboard');
 

@@ -4,38 +4,23 @@
             フォーム
         </h2>
     </x-slot>
-    <div class="max-w-7xl mx-auto px-6">
-        @if(session('message'))
+    <x-container>
+        @if (session('message'))
             <div class="text-red-600 font-bold">
-                {{session('message')}}
+                {{ session('message') }}
             </div>
         @endif
-        
+
         <form method="post" action="{{ route('post.update', $post) }}">
             @csrf
             @method('patch')
-            <div class="mt-8">
-                <div class="w-full flex flex-col">
-                    <label for="title" class="font-semibold mt-4">件名</label>
-                    <x-input-error :messages="$errors->get('title')" class="mt-2" />
-                    <input type="text" name="title" class=" w-auto py-2 border border-gray-300 rounded-md"
-                    value="{{old('title', $post->title)}}">
-                </div>
-            </div>
-
-            <div>
-                <div class="w-full flex flex-col">
-                    <label for="body" class="font-semibold mt-4">本文</label>
-                    <x-input-error :messages="$errors->get('body')" class="mt-2" />
-                    <textarea name="body" class=" w-auto py-2 border border-gray-300 rounded-md" id="body" cols="30"
-                        rows="5">{{old('body', $post->body)}}</textarea>
-                </div>
-            </div>
+            <x-input-field name="title" label="件名" type="text" :value="$post->title" />
+            <x-input-field name="body" label="本文" type="textarea" :value="$post->body" />
 
             <x-button class="mt-4">
                 ポストする
             </x-button>
         </form>
-    </div>
+    </x-container>
 
 </x-app-layout>

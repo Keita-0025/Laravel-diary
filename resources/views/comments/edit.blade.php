@@ -5,19 +5,13 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-7xl mt-4 mx-auto p-5 bg-white rounded-2xl">
+    <x-container>
         <form action="{{ route('comments.update', $comment) }}" method="POST">
             @csrf
             @method('PUT')
 
-            <div class="mb-4">
-                <label for="content" class="block text-sm font-medium text-gray-700">コメント</label>
-                <textarea id="content" name="content" rows="4" class="mt-2 w-full p-2 border rounded-md">{{ $comment->content }}</textarea>
-            </div>
-
-            <div class="flex justify-end">
-                <x-primary-button>更新</x-primary-button>
-            </div>
+            <x-input-field name="content" label="コメント" type="textarea" :value="$comment->content" />
+                <x-button class="mt-4">ポストする</x-button>
         </form>
-    </div>
+    </x-container>
 </x-app-layout>
