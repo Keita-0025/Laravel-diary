@@ -3,8 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use App\Models\User;
+use Illuminate\Pagination\Paginator;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -22,12 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('test', function(User $user){
-            if($user->id === 3) {
-                return true;
-            }
-                return false;
-        });
-        
+        Paginator::defaultView('vendor.pagination.default');
     }
 }

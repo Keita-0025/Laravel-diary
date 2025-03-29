@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class=" max-w-7xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6">
         <x-message :message="session('message')" />
 
         @foreach ($posts as $post)
@@ -27,16 +27,19 @@
                         </p>
                         <a href="{{ route('post.show', $post) }}" class="ml-4 text-gray-600">
                             💬 {{ $post->comments->count() }} 件
-                        </あ>
+                        </a>
                     </div>
-                    <a href="{{ route('comment.create', $post) }}"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        コメントする
-                    </a>
+                    <form action="{{ route('login') }}" method="GET">
+                        <x-button type="submit">
+                            <a href="{{ route('comment.create', $post) }}">
+                            コメントする
+                            </a>
+                        </x-button>
+                    </form>
                 </div>
             </div>
         @endforeach
-        <div class="mb-4">
+        <div class="my-6">
             {{ $posts->links() }}
         </div>
     </div>

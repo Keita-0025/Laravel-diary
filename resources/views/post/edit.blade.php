@@ -32,9 +32,9 @@
                 </div>
             </div>
 
-            <x-primary-button class="mt-4">
-                送信する
-            </x-primary-button>
+            <x-button class="mt-4">
+                ポストする
+            </x-button>
         </form>
     </div>
 

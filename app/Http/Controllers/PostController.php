@@ -6,6 +6,7 @@ use App\Models\post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Helpers\RedirectHelper;
 
 
 class PostController extends Controller
@@ -16,7 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
+        $posts = Post::latest()->paginate(10);
         return view('post.index', compact('posts'));
     }
 
@@ -45,7 +46,7 @@ class PostController extends Controller
         $post = Post::create($validated);
 
         $request->session()->flash('message', '保存しました');
-        return redirect()->route('post.index');
+        return RedirectHelper::backWithPage($request, 'post.index', ['post' => $post]);
     }
 
     /**
@@ -103,5 +104,11 @@ class PostController extends Controller
         $user = Auth::user();
         $posts = Post::where('user_id', $user->id)->latest()->paginate(10);
         return view('post.mypage', compact('posts'));
+    }
+
+    public function backToTimeline(Request $request, Post $post)
+    {
+        // リダイレクト先のページネーション情報を保持
+        return RedirectHelper::backWithPage($request, 'post.index', ['post' => $post]);
     }
 }

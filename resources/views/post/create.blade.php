@@ -30,9 +30,9 @@
                 </div>
             </div>
 
-            <x-primary-button class="mt-4">
+            <x-button class="mt-4">
                 ポストする
-            </x-primary-button>
+            </x-button>
         </form>
     </div>
 

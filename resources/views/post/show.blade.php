@@ -4,13 +4,14 @@
             記事編集・コメント
         </h2>
     </x-slot>
-    <div class="max-w-7xl mt-4 mx-auto px-6  bg-white  rounded-2xl">
-        <div class="mt-4 p-4">
-            <h1 class="text-lg front-semibold p-4">
-                {{ $post->title }}
+    <div class="max-w-7xl mt-4 mx-auto px-6 ">
+        <x-message :message="session('message')" class=" max-w-7xl mx-auto px-6" />
+        <div class="mt-4 p-4 bg-white  rounded-2xl">
+            <h1 class="p-4 text-lg font-semibold">
+                件名：{{ $post->title }}
             </h1>
             <hr class="w-full">
-            <p class="mt-4 whitespace-pre-line">
+            <p class="mt-4 px-4 whitespace-pre-line">
                 {{ $post->body }}
             </p>
             <div class="text-sm font-semibold flex flex-row-reverse">
@@ -19,18 +20,18 @@
             <div class="text-right flex mb-4">
                 @can('update', $post)
                     <a href="{{ route('post.edit', $post) }}" class="flex-1">
-                        <x-primary-button>
+                        <x-button class="bg-green-500 hover:bg-green-700 ml-2">
                             編集
-                        </x-primary-button>
+                        </x-button>
                     </a>
                 @endcan
                 @can('delete', $post)
                     <form method="post" action="{{ route('post.destroy', $post) }}" class="flex-2">
                         @csrf
                         @method('delete')
-                        <x-primary-button class="bg-red-700 ml-2">
+                        <x-button class="bg-red-500 hover:bg-red-700 ml-2">
                             削除
-                        </x-primary-button>
+                        </x-button>
                     </form>
                 @endcan
             </div>
@@ -47,15 +48,15 @@
                             rows="5">{{ old('content') }}</textarea>
                     </div>
                 </div>
-                <x-primary-button class="my-4">
+                <x-button class="my-4">
                     ポストする
-                </x-primary-button>
+                </x-button>
                 <hr class="w-full">
             </form>
             <h3 class="text-lg font-semibold my-4">コメント一覧</h3>
 
             @forelse ($comments as $comment)
-                <div class="mb-4 p-3 bg-white rounded-lg shadow">
+                <div class="mb-4 p-4 bg-white rounded-lg shadow">
                     <p class="text-gray-800">
                         {{ $comment->content }}
                     </p>
@@ -63,29 +64,35 @@
                         {{ $comment->user->name ?? '匿名' }} - {{ $comment->created_at->format('Y-m-d H:i') }}
 
                         @if (auth()->check() && auth()->id() === $comment->user_id)
-                            <!-- ⋯ ボタン -->
-                            <button class="text-gray-600 hover:text-gray-800"
-                                onclick="toggleDropdown({{ $comment->id }})">
-                                ⋯
-                            </button>
-
-                            {{-- <!-- ドロップダウンメニュー -->
-                            <div id="dropdown-{{ $comment->id }}"
-                                class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg p-2 mt-2 right-0">
-                                <a href="{{ route('comment.edit', $comment) }}"
-                                    class="block text-gray-800 hover:text-gray-600 p-2">編集</a>
-                                <form method="POST" action="{{ route('comment.destroy', $comment) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="block text-red-600 hover:text-red-800 p-2">削除</button>
-                                </form>
-                            </div> --}}
+                            <div class="relative">
+                                <button class="js-button text-gray-600 hover:text-gray-800"
+                                    data-comment-id="{{ $comment->id }}">
+                                    ⋯
+                                </button>
+                                <!-- オーバーレイ（透明な背景） -->
+                                <div id="overlay" class="hidden fixed inset-0 bg-black opacity-5 z-40"></div>
+                                <!-- ドロップダウンメニュー -->
+                                <div id="dropdown-{{ $comment->id }}"
+                                    class="js-dropdown-menu hidden absolute bg-white shadow-lg rounded-lg p-2 mt-2 right-0 w-48 z-50">
+                                    <a href="{{ route('comments.edit', $comment) }}"
+                                        class="block text-gray-800 hover:text-gray-600 p-2">編集</a>
+                                    <form method="POST" action="{{ route('comments.destroy', $comment) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="block text-red-600 hover:text-red-800 p-2">削除</button>
+                                    </form>
+                                </div>
+                            </div>
                         @endif
                     </div>
                 </div>
             @empty
                 <p class="text-gray-600">コメントはまだありません。</p>
             @endforelse
+            @push('scripts')
+                <script src="{{ asset('js/commentDropdown.js') }}"></script>
+            @endpush
         </div>
     </div>
 
