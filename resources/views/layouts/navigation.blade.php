@@ -13,13 +13,13 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
-                        タイムライン
+                        一覧
                     </x-nav-link>
                     <x-nav-link :href="route('post.create')" :active="request()->routeIs('post.create')">
                         新規投稿
                     </x-nav-link>
                     <x-nav-link :href="route('post.mypage')" :active="request()->routeIs('post.mypage')">
-                        自分の投稿
+                        マイページ
                     </x-nav-link>
                 </div>
             </div>
