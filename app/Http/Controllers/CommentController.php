@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
 class CommentController extends Controller
 {
+    use AuthorizesRequests;
     public function create(Post $post)
     {
         return view('comments.create', compact('post'));
@@ -30,12 +32,13 @@ class CommentController extends Controller
 
     public function edit(Comment $comment)
     {
+        $this->authorize('update', $comment);
         return view('comments.edit', compact('comment'));
     }
 
     public function update(Request $request, Comment $comment)
     {
-
+        $this->authorize('update', $comment);
         $validated = $request->validate([
             'content' => 'required|string|max:255',
         ]);
@@ -46,6 +49,7 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
+        $this->authorize('delete', $comment);
         $comment->delete();
         return redirect()->route('post.show', $comment->post_id)->with('message', 'コメントを削除しました');
     }
