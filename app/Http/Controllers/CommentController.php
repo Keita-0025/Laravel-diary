@@ -35,8 +35,6 @@ class CommentController extends Controller
 
     public function update(Request $request, Comment $comment)
     {
-        // // 認可処理（ポリシーを適用する場合）
-        // $this->authorize('update', $comment);
 
         $validated = $request->validate([
             'content' => 'required|string|max:255',

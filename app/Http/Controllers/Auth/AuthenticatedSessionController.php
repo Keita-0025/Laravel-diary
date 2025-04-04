@@ -25,12 +25,14 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+        $user = Auth::user();
 
+        if (is_null($user->email_verified_at)) {
+            return redirect()->route('verification.notice')->with('error', 'メール認証を完了してください。');
+        } 
         $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('post.index', absolute: false));
     }
-
     /**
      * Destroy an authenticated session.
      */
