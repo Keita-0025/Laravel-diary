@@ -55,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
         return redirect()->route('verification.success');
-    })->middleware(['signed'])->name('verification.verify');
+    })->middleware(['auth','signed'])->name('verification.verify');
 
     // 認証メールの再送 (POST)
     Route::post('/email/verification-notification', function (Request $request) {
