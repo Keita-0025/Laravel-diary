@@ -41,9 +41,11 @@ class PostController extends Controller
             'body' => 'required|max:400',
         ]);
 
-        $validated['user_id'] = auth()->id();
+        $post = new Post($validated);
 
-        $post = Post::create($validated);
+        $post->user()->associate(auth()->user());
+        $post->save();
+
 
         $request->session()->flash('message', '保存しました');
         return RedirectHelper::backWithPage($request, 'post.index', ['post' => $post]);

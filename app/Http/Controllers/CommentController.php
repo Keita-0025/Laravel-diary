@@ -22,10 +22,12 @@ class CommentController extends Controller
             'content' => 'required|string|max:500',
         ]);
 
-        $validated['post_id'] = $post->id;
-        $validated['user_id'] = auth()->id();
+        $comment = new Comment($validated);
 
-        Comment::create($validated);
+        $comment->post()->associate($post);
+        $comment->user()->associate(auth()->user());
+        
+        $comment->save();
 
         return redirect()->route('post.show', $post)->with('message', 'コメントを投稿しました！');
     }
